@@ -5,11 +5,30 @@ const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async (req, res)=>{
 
-    const usuarios = await Usuario.find( {}, 'nombre email role google ');
+    const desde = Number(req.query.desde) || 0; //si viene vacio el parametro desde que ponga cero
+    console.log(desde);
+
+    // const usuarios = await Usuario.find( {}, 'nombre email role google ')// campos a mostra
+    //                                 .skip(desde)// se salte los registros que tiene la variable desde 
+    //                                 .limit( 5 ); // establece cuantos registros quiere desde la posicion de la variabled desde
+
+    // const total = await Usuario.count();
+
+
+    // realiza las dos operaciones al mismo tiempo y cuando termine manda el resultado del primer parametro de promise
+    // a la variable usuarios y el segundo parametro a total
+    const [ usuarios, total ] = await Promise.all([
+        Usuario.find( {}, 'nombre email role google img')// campos a mostra
+                .skip(desde)// se salte los registros que tiene la variable desde 
+                .limit( 5 ),// establece cuantos registros quiere desde la posicion de la variabled desde
+        
+        Usuario.countDocuments() // cuenta los registros de usuarios
+    ])
 
     res.json({
         ok: true,
-        usuarios
+        usuarios,
+        total
     })
 
 }

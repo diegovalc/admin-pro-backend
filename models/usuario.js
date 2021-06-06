@@ -4,23 +4,23 @@ const UsuarioSchema = new Schema({
 
     nombre:{
         type: String,
-        require: true
+        required: true
     },
     email:{
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     password:{
         type: String,
-        require: true
+        required: true
     },
     img:{
         type: String,
     },
     role:{
         type: String,
-        require: true,
+        required: true,
         default: 'USER_ROLE'
     },
     google:{
